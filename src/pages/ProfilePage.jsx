@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const user = useSelector((state) => state.auth.user); // Pegando o usuário diretamente do Redux

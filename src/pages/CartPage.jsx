@@ -10,7 +10,7 @@ export default function CartPage() {
   const user = useSelector((state) => state.auth.user); // Access the authenticated user
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Hook for navigation
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
@@ -32,39 +32,32 @@ export default function CartPage() {
     }
   };
 
-  // const handleCheckout = () => {
-  //   if (!user) {
-  //     toast.error("You need to log in before completing your purchase!");
-  //     navigate("/login");
-  //   } else {
-  //     toast.success("Purchase completed successfully!");
-  //     dispatch(clearCart());
-  //     setTimeout(() => {
-  //       navigate("/profile");
-  //     }, 1500);
-  //   }
-  // };
-  const handleCheckout = () => {
-    if (!user) {
-      toast.error("You need to log in before completing your purchase!");
-      navigate("/login");
-    } else {
-      const newOrder = {
-        id: Date.now(),
-        date: new Date().toISOString().split("T")[0],
-        total,
-        items: cartItems,
-      };
-  
-      dispatch(addOrder(newOrder));
-      dispatch(clearCart());
-      toast.success("Purchase completed successfully!");
-  
-      setTimeout(() => {
-        navigate("/profile");
-      }, 1500);
-    }
-  };
+const handleCheckout = () => {
+  if (cartItems.length === 0) {
+    toast.error("Your cart is empty. Add some items to proceed with checkout.");
+    return;
+  }
+
+  if (!user) {
+    toast.error("You need to log in before completing your purchase!");
+    navigate("/login");
+  } else {
+    const newOrder = {
+      id: Date.now(),
+      date: new Date().toISOString().split("T")[0],
+      total,
+      items: cartItems,
+    };
+
+    dispatch(addOrder(newOrder));
+    dispatch(clearCart());
+    toast.success("Purchase completed successfully!");
+
+    setTimeout(() => {
+      navigate("/profile");
+    }, 1500);
+  }
+};
 
   // Calculate total price
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);

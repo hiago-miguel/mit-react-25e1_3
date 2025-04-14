@@ -12,5 +12,12 @@
     "description": "Nintendo, Jogo, The Legend of Zelda: Tears of Kingdom, Nintendo Switch",
     "price": 349.90,
     "image": "https://m.media-amazon.com/images/I/618GR0WMoQL._AC_SL1000_.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Final Fantasy I-VI Pixel Remaster Collection",
+    "description": "Final Fantasy I-VI Pixel Remaster Collection - Anniversary Edition - Nintendo Switch",
+    "price": 319.90,
+    "image": "https://m.media-amazon.com/images/I/71QWO4tJLoL._AC_SL1500_.jpg"
   }
 ]
