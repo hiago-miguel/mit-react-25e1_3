@@ -1,13 +1,19 @@
 // src/pages/CatalogPage.jsx
 import { useEffect, useState } from "react";
-import productsData from "../assets/products.json";
+import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
 export default function CatalogPage() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    setProducts(productsData);
+    axios.get("https://fakestoreapi.com/products/")
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar produtos:", error);
+      });
   }, []);
 
   return (

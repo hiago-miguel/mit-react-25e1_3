@@ -21,20 +21,20 @@ const Header = () => {
             alt="GameStore Logo"
             className="w-16 h-16 mr-2" // Adjust size as needed
           />
-          <span className="text-xl text-white">GameStore</span>
+          <span className="text-xl text-white">AllMart</span>
         </Link>
         <nav className="flex gap-4">
-          <Link to="/catalog" className="text-white">Catalog</Link>
-          <Link to="/cart" className="text-white">Cart</Link>
+          <Link to="/catalog" className="text-white">Catálogo</Link>
+          <Link to="/cart" className="text-white">Carrinho</Link>
           {user ? (
             <>
               <Link to="/profile" className="text-white hover:underline">
                 Hello, {user.name || user.email}
               </Link>
-              <button onClick={handleLogout} className="text-white">Logout</button>
+              <button onClick={handleLogout} className="text-white">Sair</button>
             </>
           ) : (
-            <Link to="/login" className="text-white">Login</Link>
+            <Link to="/login" className="text-white">Entrar</Link>
           )}
         </nav>
       </div>

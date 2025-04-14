@@ -1,20 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart, updateQuantity, clearCart } from "../redux/cartSlice";
 import { addOrder } from "../redux/ordersSlice";
-import { useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
-  const cartItems = useSelector((state) => state.cart.items); // Access cart items
-  const user = useSelector((state) => state.auth.user); // Access the authenticated user
+  const cartItems = useSelector((state) => state.cart.items);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Hook for navigation
-  // const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
-    toast.success(`${product.name} added to cart!`);
+    toast.success(`${product.title} added to cart!`);
   };
 
   const handleRemoveFromCart = (itemId) => {
@@ -32,34 +30,35 @@ export default function CartPage() {
     }
   };
 
-const handleCheckout = () => {
-  if (cartItems.length === 0) {
-    toast.error("Your cart is empty. Add some items to proceed with checkout.");
-    return;
-  }
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty. Add some items to proceed with checkout.");
+      return;
+    }
 
-  if (!user) {
-    toast.error("You need to log in before completing your purchase!");
-    navigate("/login");
-  } else {
-    const newOrder = {
-      id: Date.now(),
-      date: new Date().toISOString().split("T")[0],
-      total,
-      items: cartItems,
-    };
+    if (!user) {
+      toast.error("You need to log in before completing your purchase!");
+      navigate("/login");
+    } else {
+      const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
-    dispatch(addOrder(newOrder));
-    dispatch(clearCart());
-    toast.success("Purchase completed successfully!");
+      const newOrder = {
+        id: Date.now(),
+        date: new Date().toISOString().split("T")[0],
+        total,
+        items: cartItems,
+      };
 
-    setTimeout(() => {
-      navigate("/profile");
-    }, 1500);
-  }
-};
+      dispatch(addOrder(newOrder));
+      dispatch(clearCart());
+      toast.success("Purchase completed successfully!");
 
-  // Calculate total price
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1500);
+    }
+  };
+
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
   return (
@@ -70,7 +69,15 @@ const handleCheckout = () => {
       ) : (
         cartItems.map((item, index) => (
           <div key={index} className="flex justify-between items-center bg-gray-800 p-4 rounded mb-2">
-            <span>{item.name} - ${item.price} x {item.quantity}</span>
+            <div className="flex items-center gap-4">
+              <img src={item.image} alt={item.title} className="w-16 h-16 object-contain bg-white rounded" />
+              <div>
+                <p className="font-semibold">{item.title}</p>
+                <p className="text-sm text-gray-400">
+                  $ {item.price} x {item.quantity}
+                </p>
+              </div>
+            </div>
             <div className="flex items-center">
               <button
                 onClick={() => handleDecreaseQuantity(item.id)}
@@ -95,10 +102,9 @@ const handleCheckout = () => {
           </div>
         ))
       )}
-      
-      {/* Display the total */}
+
       <div className="mt-4 text-xl font-semibold">
-        <p>Total: R$ {total}</p>
+        <p>Total: $ {total}</p>
       </div>
 
       <button
