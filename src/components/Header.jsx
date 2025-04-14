@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Usando useSelector do Redux
+import { useDispatch, useSelector } from 'react-redux'; // Use useDispatch and useSelector from Redux
+import { logout } from '../redux/actions'; // Import logout action
 
-const Header = () => {
-  // Acessando o user diretamente do Redux
+const Header = ({ onLogout }) => { // Accept onLogout from App.jsx
+
   const user = useSelector((state) => state.auth.user);
 
   return (
@@ -20,7 +21,7 @@ const Header = () => {
                   Hello, {user.name || user.email}
                 </Link>
               </span>
-              <button onClick={() => dispatch(logout())} className="text-white">Logout</button>
+              <button onClick={onLogout} className="text-white">Logout</button>
             </>
           ) : (
             <Link to="/login" className="text-white">Login</Link>

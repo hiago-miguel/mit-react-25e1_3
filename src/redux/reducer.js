@@ -1,4 +1,5 @@
-import { SET_USER } from "./actions";
+// authReducer.js
+import { SET_USER, LOGOUT } from './actions';
 
 const initialState = {
   user: null,
@@ -11,6 +12,11 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload,
+      };
+    case LOGOUT:  // Novo caso para o logout
+      return {
+        ...state,
+        user: null,  // Limpar o estado do usuário
       };
     default:
       return state;
