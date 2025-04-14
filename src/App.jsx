@@ -1,61 +1,60 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Provider } from "react-redux";
+import { useEffect } from "react";
+import { Provider, useDispatch } from "react-redux";
 import store from "./redux/store";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
-import CatalogPage from "./pages/CatalogPage";  // Corrigido
-import ProfilePage from "./pages/ProfilePage";  // Corrigido
+import CatalogPage from "./pages/CatalogPage";
+import ProfilePage from "./pages/ProfilePage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import Header from "./components/Header";
 import AuthService from "./services/AuthService";
-import { ToastContainer } from "react-toastify";  // Adicionado corretamente
+import { setUser } from "./redux/actions"; // Adicione a ação setUser
+import { ToastContainer } from "react-toastify";  
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUser = async () => {
       const authUser = await AuthService.getCurrentUser();
-      setUser(authUser);
+      if (authUser) {
+        dispatch(setUser(authUser));  // Salve o usuário no Redux
+      }
     };
     fetchUser();
-  }, []);  
+  }, [dispatch]);  
 
   const handleLogin = async (credentials) => {
     const loggedUser = await AuthService.login(credentials);
-    setUser(loggedUser);
+    dispatch(setUser(loggedUser));  // Atualize o usuário no Redux após login
   };
 
   const handleLogout = () => {
     AuthService.logout();
-    setUser(null);
+    dispatch(setUser(null)); // Limpe o usuário do Redux ao fazer logout
   };
 
   return (
     <Provider store={store}>
       <Router>
         <div className="min-h-screen bg-gray-900 text-white">
-          <Header user={user} onLogout={handleLogout} />  {/* O Header deve ser renderizado corretamente */}
+          <Header onLogout={handleLogout} />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
             <Route
-              path="/dashboard"
-              element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />}
-            />
-            <Route
               path="/profile"
-              element={user ? <ProfilePage /> : <Navigate to="/login" />}
+              element={<ProfilePage />}
             />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={user ? <CheckoutPage /> : <Navigate to="/login" />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
           </Routes>
         </div>
-        <ToastContainer />  {/* Aqui a notificação de toast será exibida */}
+        <ToastContainer />
       </Router>
     </Provider>
   );

@@ -1,26 +1,10 @@
-// import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
-
-// export default function Header() {
-//   const cart = useSelector((state) => state.cart);
-
-//   return (
-//     <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-//       <nav className="space-x-4">
-//         <Link to="/">Home</Link>
-//         <Link to="/catalog">Catalog</Link>
-//         <Link to="/cart">Cart ({cart.length})</Link>
-//         <Link to="/checkout">Checkout</Link>
-//       </nav>
-//     </header>
-//   );
-// }
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // Usando useSelector do Redux
 
-const Header = ({ user, onLogout }) => {
-  // Verifica se o user existe antes de tentar acessar propriedades
-  const userName = user ? user.name : null;
+const Header = () => {
+  // Acessando o user diretamente do Redux
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <header className="bg-gray-800 p-4">
@@ -31,8 +15,12 @@ const Header = ({ user, onLogout }) => {
           <Link to="/cart" className="text-white">Cart</Link>
           {user ? (
             <>
-              <span className="text-white">Hello, {userName}</span>
-              <button onClick={onLogout} className="text-white">Logout</button>
+              <span className="text-white">
+                <Link to="/profile" className="text-white hover:underline">
+                  Hello, {user.name || user.email}
+                </Link>
+              </span>
+              <button onClick={() => dispatch(logout())} className="text-white">Logout</button>
             </>
           ) : (
             <Link to="/login" className="text-white">Login</Link>
@@ -44,4 +32,3 @@ const Header = ({ user, onLogout }) => {
 };
 
 export default Header;
-

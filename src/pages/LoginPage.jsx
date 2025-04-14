@@ -1,17 +1,33 @@
 import { useState } from "react";
+import AuthService from "../services/AuthService";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
+import { useNavigate, useLocation } from "react-router-dom";
 
-export default function LoginPage({ onLogin }) {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/cart"; // Default to /cart
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await onLogin({ email, password });
-      setSuccess(true);
-      setMessage("Login realizado com sucesso!");
+      const user = await AuthService.authenticate(email, password);
+
+      if (user) {
+        dispatch(login(user));
+        setSuccess(true);
+        setMessage("Login realizado com sucesso!");
+        setTimeout(() => navigate(from), 1000); // Redirect after showing message
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       setSuccess(false);
       setMessage("Erro ao fazer login. Verifique suas credenciais.");

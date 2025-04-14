@@ -1,23 +1,24 @@
+import users from '../assets/users.json';
+
 const AuthService = {
-  login: async ({ email, password }) => {
-    // Simula chamada a uma API externa como o Strapi
-    if (email === "teste@exemplo.com" && password === "123456") {
-      const user = { email, token: "fake-jwt-token" };
-      localStorage.setItem("user", JSON.stringify(user));
+  authenticate: (email, password) => {
+    const user = users.find(
+      (user) => user.email === email && user.password === password
+    );
+    if (user) {
       return user;
     } else {
-      throw new Error("Credenciais inválidas");
+      throw new Error("Invalid email or password");
     }
+  },
+
+  getCurrentUser: () => {
+    return JSON.parse(localStorage.getItem("user"));
   },
 
   logout: () => {
     localStorage.removeItem("user");
-  },
-
-  getCurrentUser: async () => {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
-  },
+  }
 };
 
 export default AuthService;
