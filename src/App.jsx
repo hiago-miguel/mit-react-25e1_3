@@ -22,7 +22,7 @@ export default function App() {
       setUser(authUser);
     };
     fetchUser();
-  }, []);
+  }, []);  
 
   const handleLogin = async (credentials) => {
     const loggedUser = await AuthService.login(credentials);
