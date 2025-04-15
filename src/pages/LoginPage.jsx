@@ -13,7 +13,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/cart"; // Default to /cart
+  const from = location.state?.from?.pathname || "/catalog";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export default function LoginPage() {
         dispatch(login(user));
         setSuccess(true);
         setMessage("Login realizado com sucesso!");
-        setTimeout(() => navigate(from), 1000); // Redirect after showing message
+        setTimeout(() => navigate(from), 1000);
       } else {
         throw new Error();
       }

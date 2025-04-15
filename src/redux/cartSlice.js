@@ -1,7 +1,5 @@
-// src/redux/cartSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-// Load the cart items from localStorage if available
 const savedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
 const initialState = {
