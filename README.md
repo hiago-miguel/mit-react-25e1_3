@@ -59,3 +59,4 @@ O sistema tem dois usuários cadastrados para fins de teste. Use as credenciais 
 **LocalStorage**: O sistema utiliza o localStorage para armazenar dados de autenticação do usuário e manter o estado do carrinho de compras entre as sessões. Ao fazer login, os dados do usuário são salvos no localStorage e recuperados ao iniciar a aplicação.
 
 ## URL para o Netlify
+* https://hiago-react-25e13.netlify.app/
